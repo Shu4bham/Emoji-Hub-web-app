@@ -1,5 +1,4 @@
-
-const API_URL = "https://emojihub.yurace.pro/api/all";
+const API_URL = "https://emoji-api.com/emojis?access_key=92a3db57457acd50f582d2d97f3ca60449dcd2d7";
 const emojiContainer = document.getElementById("emoji-container");
 const categorySelect = document.getElementById("category-select");
 
@@ -28,7 +27,7 @@ fetch(API_URL)
 
 // Function to extract unique categories from emojis
 function extractCategories(emojis) {
-  return [...new Set(emojis.map(emoji => emoji.category))];
+  return [...new Set(emojis.map(emoji => emoji.group))];
 }
 
 // Function to populate the category select dropdown
@@ -46,7 +45,7 @@ function filterEmojisByCategory(category) {
   if (category === "all") {
     return allEmojis;
   }
-  return allEmojis.filter(emoji => emoji.category === category);
+  return allEmojis.filter(emoji => emoji.group === category);
 }
 
 // Function to display emojis
@@ -54,27 +53,25 @@ function displayEmojis(emojis) {
   emojiContainer.innerHTML = "";
 
   emojis.forEach(emoji => {
-    const { name, category, group, htmlCode } = emoji;
+    const { character, unicodeName, group } = emoji;
 
     const emojiCard = document.createElement("div");
     emojiCard.classList.add("emoji-card");
 
     const emojiElement = document.createElement("span");
     emojiElement.classList.add("emoji");
-    emojiElement.innerHTML = htmlCode[0];
+    emojiElement.innerText = character;
     emojiCard.appendChild(emojiElement);
 
     const nameElement = document.createElement("p");
-    nameElement.innerText = name;
+    nameElement.classList.add("emoji-name");
+    nameElement.innerText = unicodeName;
     emojiCard.appendChild(nameElement);
 
     const categoryElement = document.createElement("p");
-    categoryElement.innerText = `Category: ${category}`;
+    categoryElement.classList.add("emoji-category");
+    categoryElement.innerText = `Category: ${group}`;
     emojiCard.appendChild(categoryElement);
-
-    const groupElement = document.createElement("p");
-    groupElement.innerText = `Group: ${group}`;
-    emojiCard.appendChild(groupElement);
 
     emojiContainer.appendChild(emojiCard);
   });
